@@ -1,11 +1,11 @@
 package main
 
 import (
-	"backend/Algorithm"
+	"backend/algorithm"
 	"fmt"
 )
 
 func main() {
-	//fmt.Println(Algorithm.BuildLast("hahahahsgsdgsg"))
-	fmt.Println(Algorithm.HammingDistance("01010101", "010101011"))
+	//fmt.Println(algorithm.BuildLast("hahahahsgsdgsg"))
+	fmt.Println(algorithm.HammingDistance("01010101", "010101011"))
 }

@@ -1,4 +1,4 @@
-package Algorithm
+package algorithm
 
 func sufPref(input string) []int {
 
