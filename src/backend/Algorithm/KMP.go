@@ -1,6 +1,7 @@
 package Algorithm
 
 func sufPref(input string) []int {
+
 	i, j, m := 1, 0, len(input)
 
 	bx := make([]int, m)
@@ -21,14 +22,16 @@ func sufPref(input string) []int {
 	return bx
 }
 
-func KMP(input string, text string) int {
+func KMP(input string, text string) (int, float64) {
+
 	n, m, i, j := len(text), len(input), 0, 0
 	b := sufPref(input)
+	simLr := HammingDistance(input, text)
 
 	for i < n {
 		if input[j] == text[i] {
 			if j == m-1 {
-				return i - m + 1
+				return i - m + 1, 100
 			}
 			i++
 			j++
@@ -39,5 +42,5 @@ func KMP(input string, text string) int {
 		}
 	}
 
-	return -1
+	return -1, simLr
 }

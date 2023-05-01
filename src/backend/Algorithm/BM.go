@@ -16,19 +16,22 @@ func buildLast(input string) []int {
 	return bl
 }
 
-func BM(input string, text string) int {
+func BM(input string, text string) (int, float64) {
+
 	bl := buildLast(input)
+	simLr := HammingDistance(input, text)
 	n, m := len(text), len(input)
 	i := m - 1
 	j := m - 1
+
 	if i > n-1 {
-		return -1
+		return -1, simLr
 	}
 
 	for {
 		if input[j] == text[i] {
 			if j == 0 {
-				return i
+				return i, 100
 			} else {
 				i--
 				j--
@@ -43,5 +46,5 @@ func BM(input string, text string) int {
 		}
 	}
 
-	return -1
+	return -1, simLr
 }

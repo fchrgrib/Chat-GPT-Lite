@@ -7,5 +7,5 @@ import (
 
 func main() {
 	//fmt.Println(Algorithm.BuildLast("hahahahsgsdgsg"))
-	fmt.Println(Algorithm.BM("oaaaa", "ooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"))
+	fmt.Println(Algorithm.HammingDistance("01010101", "010101011"))
 }
