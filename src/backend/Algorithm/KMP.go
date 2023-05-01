@@ -20,3 +20,24 @@ func SufPref(input string) []int {
 
 	return bx
 }
+
+func KMP(input string, text string) int {
+	n, m, i, j := len(text), len(input), 0, 0
+	b := SufPref(input)
+
+	for i < n {
+		if input[j] == text[i] {
+			if j == m-1 {
+				return i - m + 1
+			}
+			i++
+			j++
+		} else if j > 0 {
+			j = b[j-1]
+		} else {
+			i++
+		}
+	}
+
+	return -1
+}
