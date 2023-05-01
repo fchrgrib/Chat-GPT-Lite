@@ -9,6 +9,6 @@ type Chat struct {
 	time time.Time `json:"time"`
 }
 
-type ListChat struct {
-	listChat *Chat
+type ListChats struct {
+	ListChat []Chat
 }
