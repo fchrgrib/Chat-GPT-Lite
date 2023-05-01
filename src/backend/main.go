@@ -6,5 +6,6 @@ import (
 )
 
 func main() {
-	fmt.Println(Algorithm.SufPref("abaaaaabaaa"))
+	//fmt.Println(Algorithm.BuildLast("hahahahsgsdgsg"))
+	fmt.Println(Algorithm.BM("oaaaa", "ooooooooooaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"))
 }

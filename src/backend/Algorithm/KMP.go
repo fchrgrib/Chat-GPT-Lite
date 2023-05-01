@@ -1,6 +1,6 @@
 package Algorithm
 
-func SufPref(input string) []int {
+func sufPref(input string) []int {
 	i, j, m := 1, 0, len(input)
 
 	bx := make([]int, m)
@@ -23,7 +23,7 @@ func SufPref(input string) []int {
 
 func KMP(input string, text string) int {
 	n, m, i, j := len(text), len(input), 0, 0
-	b := SufPref(input)
+	b := sufPref(input)
 
 	for i < n {
 		if input[j] == text[i] {
