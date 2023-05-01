@@ -1,7 +1,14 @@
 import React from 'react'
 import MessageBubble from './MessageBubble'
+import { useState } from 'react';
 
-function Conversation() {
+function Conversation({parentToChild}) {
+  const[data, setData] = useState('');
+
+  const dataToMessage = () => {
+    setData({parentToChild});
+  }
+
   return (
     <div className='conversation'>
         <MessageBubble/>
