@@ -3,10 +3,10 @@ package models
 import "time"
 
 type Chat struct {
-	id   string    `json:"id"`
-	from string    `json:"from"`
-	chat string    `json:"chat"`
-	time time.Time `json:"time"`
+	Id   string    `json:"id"`
+	From string    `json:"from"`
+	Chat string    `json:"chat"`
+	Time time.Time `json:"time"`
 }
 
 type ListChats struct {

@@ -19,6 +19,8 @@ func PostChat(c *gin.Context) {
 		return
 	}
 
+	chat.From = "user"
+
 	if err := c.ShouldBindJSON(&chat); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -26,7 +28,7 @@ func PostChat(c *gin.Context) {
 		return
 	}
 
-	if err := db.Create(&chat); err.Error != nil {
+	if err := db.Create(chat); err.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error.Error(),
 		})
