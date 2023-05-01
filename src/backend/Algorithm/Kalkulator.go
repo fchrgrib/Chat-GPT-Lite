@@ -1,7 +1,6 @@
 package algorithm
 
 import (
-	"fmt"
 	"strconv"
 )
 import "math"
@@ -10,36 +9,30 @@ func Calculate(querry string) string {
 	// Basis
 	if isANumber(querry) {
 		return querry
-	} else if IsQuerryAtom(querry) {
+	} else if isQuerryAtom(querry) {
 		if isKurung(querry, 1, len(querry)-2) {
-			return convertToString(calculateTwoNumber(querry[1 : len(querry)-1]))
+			return calculateTwoNumber(querry[1 : len(querry)-1])
 		} else {
-			return convertToString(calculateTwoNumber(querry))
+			return calculateTwoNumber(querry)
 		}
-	} else {
-		solveAtom, start, end := GetQuerry(querry)
+	} else { // Rekurens
+		solveAtom, start, end := getQuerry(querry)
 		solveAtom = Calculate(solveAtom)
 		var solveGlobal string
-		fmt.Println("Awal")
-		fmt.Println(querry)
-		fmt.Println(solveAtom)
 		if isKurung(querry, start, end) {
-			fmt.Println("Kurung")
 			solveGlobal = querry[:start-1] + solveAtom + querry[end+2:]
 		} else {
-			fmt.Println("Bukan")
 			solveGlobal = querry[:start] + solveAtom + querry[end+1:]
 		}
-		fmt.Println(solveGlobal)
 		return Calculate(solveGlobal)
 	}
 }
 
-func calculateTwoNumber(querryAtom string) float64 {
+func calculateTwoNumber(querryAtom string) string {
 	operand1, operator, operand2 := getOperandOperator(querryAtom)
 	var retVal float64
 	if operator == "^" {
-		retVal = math.Pow(float64(operand1), float64(operand2))
+		retVal = math.Pow(operand1, operand2)
 	} else if operator == "*" {
 		retVal = operand1 * operand2
 	} else if operator == "/" {
@@ -49,16 +42,17 @@ func calculateTwoNumber(querryAtom string) float64 {
 	} else if operator == "-" {
 		retVal = operand1 - operand2
 	}
-	return retVal
+	return convertToString(retVal)
 }
 
 func getOperandOperator(querryAtom string) (float64, string, float64) {
-	var operand2Turn bool = false
+	var operand2Turn = false
 	var tempOperand1 string
 	var operator string
 	var tempOperand2 string
 	var currentChar string
-	var firstChar bool = true
+	var firstChar = true
+
 	for _, character := range querryAtom {
 		currentChar = string(character)
 		if firstChar {
@@ -81,13 +75,18 @@ func getOperandOperator(querryAtom string) (float64, string, float64) {
 
 func convertToFloat(operand string) float64 {
 	if string(operand[0]) == "-" {
-		tempRetVal := string(operand[1:])
+		tempRetVal := operand[1:]
 		retVal, _ := strconv.ParseFloat(tempRetVal, 64)
 		return -1 * retVal
 	} else {
 		retVal, _ := strconv.ParseFloat(operand, 64)
 		return retVal
 	}
+}
+
+func convertToString(number float64) string {
+	retVal := strconv.FormatFloat(number, 'f', -1, 64)
+	return retVal
 }
 
 func isOperator(symbol string) bool {
@@ -104,24 +103,25 @@ func isANumber(symbol string) bool {
 	for _, v := range []string{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "."} {
 		validNumber[v] = true
 	}
-	if len(symbol) == 0 {
+	if len(symbol) <= 0 {
 		return false
 	} else {
-		for i := 1; i < len(symbol); i++ {
-			currentChar := string(symbol[i])
-			if i == 0 && !(currentChar == "-" || validNumber[currentChar]) {
-				return false
-			} else if !validNumber[currentChar] {
-				return false
+		if !(string(symbol[0]) == "-" || validNumber[string(symbol[0])]) {
+			return false
+		} else {
+			for i := 1; i < len(symbol); i++ {
+				currentChar := string(symbol[i])
+				if !validNumber[currentChar] {
+					return false
+				}
 			}
 		}
 	}
 	return true
 }
 
-func GetQuerry(querry string) (string, int, int) {
-	startIndex := 0
-	endIndex := len(querry) - 1
+func getQuerry(querry string) (string, int, int) {
+	// Index mulai dan selesai dari operasi antara dua bilangan
 	startIndexKurung := -1
 	endIndexKurung := -1
 	startIndexPangkat := -1
@@ -135,6 +135,7 @@ func GetQuerry(querry string) (string, int, int) {
 	startIndexKurang := -1
 	endIndexKurang := -1
 
+	numKurung := 0
 	prevNumberStartIndex := 0
 
 	for i, x := range querry {
@@ -143,8 +144,13 @@ func GetQuerry(querry string) (string, int, int) {
 			if startIndexKurung == -1 {
 				startIndexKurung = i + 1
 			}
+			numKurung++
 		} else if currentChar == ")" {
-			endIndexKurung = i - 1
+			numKurung--
+			if numKurung == 0 {
+				endIndexKurung = i - 1
+				break
+			}
 		} else if currentChar == "^" && startIndexPangkat == -1 {
 			startIndexPangkat = prevNumberStartIndex
 			endIndexPangkat = getPostNumberEndIndex(querry, i)
@@ -163,7 +169,6 @@ func GetQuerry(querry string) (string, int, int) {
 		}
 		if isOperator(currentChar) && i != 0 && !isOperator(string(querry[i-1])) {
 			prevNumberStartIndex = i + 1
-
 		}
 	}
 
@@ -199,13 +204,14 @@ func GetQuerry(querry string) (string, int, int) {
 	if startIndexKurang != -1 {
 		return querry[startIndexKurang : endIndexKurang+1], startIndexKurang, endIndexKurang
 	}
-	return querry[startIndex : endIndex+1], startIndex, endIndex
+	return "", -1, -1
 }
 
-func IsQuerryAtom(querry string) bool {
+func isQuerryAtom(querry string) bool {
 	firstChar := true
 	operatorCount := 0
 	prevOperator := false
+
 	for _, character := range querry {
 		currentChar := string(character)
 		if operatorCount > 1 {
@@ -232,19 +238,11 @@ func IsQuerryAtom(querry string) bool {
 	return true
 }
 
-func convertToString(number float64) string {
-	retVal := strconv.FormatFloat(number, 'f', -1, 64)
-	return retVal
-}
-
 func getPostNumberEndIndex(querry string, startIndex int) int {
 	var i int
-	negFound := false
 	for i = startIndex + 1; i < len(querry); i++ {
 		currentChar := string(querry[i])
-		if currentChar == "-" && !negFound {
-			negFound = true
-		} else if (currentChar == "-" && negFound) || (currentChar != "-" && isOperator(currentChar)) {
+		if (i != startIndex+1 && currentChar == "-") || (currentChar != "-" && isOperator(currentChar)) {
 			return i - 1
 		}
 	}
