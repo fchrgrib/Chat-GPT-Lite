@@ -7,5 +7,5 @@ func main() {
 	//_db, err := db.GetDatabase()
 	//fmt.Println(_db, err)
 
-	utils.InsertQuestAns("Tambahkan pertanyaan Messi atau Ronaldo? dengan jawaban Messi")
+	print(utils.InsertQuestAns("Tambahkan pertanyaan Messi atau Ronaldo? dengan jawaban Messi").Error())
 }

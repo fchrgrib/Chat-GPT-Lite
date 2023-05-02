@@ -4,6 +4,7 @@ import (
 	"backend/algorithm"
 	"backend/db"
 	"backend/models"
+	"errors"
 	"github.com/google/uuid"
 	"time"
 )
@@ -25,6 +26,10 @@ func InsertQuestAns(input string) error {
 	}
 	for i := idxAns + len(" dengan jawaban "); i < len(input); i++ {
 		ansChars = append(ansChars, input[i])
+	}
+
+	if err := _db.Where("question = ?", questChars); err != nil {
+		return errors.New("pertanyaan sudah ada")
 	}
 
 	if err := _db.Create(models.QuestAns{
