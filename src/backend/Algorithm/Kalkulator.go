@@ -60,7 +60,7 @@ func getOperandOperator(querryAtom string) (float64, string, float64) {
 			firstChar = false
 		} else if operand2Turn {
 			tempOperand2 += currentChar
-		} else if isOperator(currentChar) {
+		} else if IsOperator(currentChar) {
 			operand2Turn = true
 			operator = currentChar
 		} else {
@@ -89,7 +89,7 @@ func convertToString(number float64) string {
 	return retVal
 }
 
-func isOperator(symbol string) bool {
+func IsOperator(symbol string) bool {
 	validOperator := map[string]bool{}
 	for _, v := range []string{"+", "-", "*", "/", "^"} {
 		validOperator[v] = true
@@ -163,11 +163,11 @@ func getQuerry(querry string) (string, int, int) {
 		} else if currentChar == "+" && startIndexTambah == -1 {
 			startIndexTambah = prevNumberStartIndex
 			endIndexTambah = getPostNumberEndIndex(querry, i)
-		} else if currentChar == "-" && startIndexKurang == -1 && i != 0 && !isOperator(string(querry[i-1])) {
+		} else if currentChar == "-" && startIndexKurang == -1 && i != 0 && !IsOperator(string(querry[i-1])) {
 			startIndexKurang = prevNumberStartIndex
 			endIndexKurang = getPostNumberEndIndex(querry, i)
 		}
-		if isOperator(currentChar) && i != 0 && !isOperator(string(querry[i-1])) {
+		if IsOperator(currentChar) && i != 0 && !IsOperator(string(querry[i-1])) {
 			prevNumberStartIndex = i + 1
 		}
 	}
@@ -225,7 +225,7 @@ func isQuerryAtom(querry string) bool {
 			} else {
 				prevOperator = false
 			}
-		} else if isOperator(currentChar) {
+		} else if IsOperator(currentChar) {
 			operatorCount++
 			prevOperator = true
 		} else {
@@ -242,7 +242,7 @@ func getPostNumberEndIndex(querry string, startIndex int) int {
 	var i int
 	for i = startIndex + 1; i < len(querry); i++ {
 		currentChar := string(querry[i])
-		if (i != startIndex+1 && currentChar == "-") || (currentChar != "-" && isOperator(currentChar)) {
+		if (i != startIndex+1 && currentChar == "-") || (currentChar != "-" && IsOperator(currentChar)) {
 			return i - 1
 		}
 	}
