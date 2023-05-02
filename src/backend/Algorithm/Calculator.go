@@ -1,5 +1,6 @@
 package algorithm
 
+// apakah semua orang merasa jika saya
 import (
 	"strconv"
 )
