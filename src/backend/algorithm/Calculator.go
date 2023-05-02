@@ -2,9 +2,9 @@ package algorithm
 
 // apakah semua orang merasa jika saya
 import (
+	"math"
 	"strconv"
 )
-import "math"
 
 func Calculate(querry string) string {
 	// Basis
