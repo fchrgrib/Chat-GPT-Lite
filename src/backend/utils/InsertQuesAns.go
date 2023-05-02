@@ -28,15 +28,19 @@ func InsertQuestAns(input string) error {
 		ansChars = append(ansChars, input[i])
 	}
 
-	if err := _db.Where("question = ?", questChars); err != nil {
-		return errors.New("pertanyaan sudah ada")
+	var question models.QuestAns
+
+	_ = _db.Where("question = ?", questChars).First(&question)
+
+	if len(question.Question) != 0 {
+		return errors.New(question.TimeCreate)
 	}
 
 	if err := _db.Create(models.QuestAns{
 		Id:         uuid.New().String(),
 		Question:   string(questChars),
 		Answer:     string(ansChars),
-		TimeCreate: time.Now().Local(),
+		TimeCreate: time.Now().Local().String(),
 	}); err.Error != nil {
 		return err.Error
 	}
