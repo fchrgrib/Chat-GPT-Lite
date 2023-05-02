@@ -59,7 +59,7 @@ func CheckInsertQuesAns(input string) (isInsert, isQuesSame bool, matches1, matc
 	return
 }
 
-func CheckEraseQues(input string) (isAsk, isFound bool) {
+func CheckEraseQues(input string) (isAsk, isFound bool, quest string) {
 	pattern := "Hapus pertanyan (.+)"
 
 	re := regexp.MustCompile(pattern)
@@ -82,7 +82,7 @@ func CheckEraseQues(input string) (isAsk, isFound bool) {
 		_ = _db.Delete(question)
 		isFound = true
 	}
-
+	quest = question.Question
 	isFound = false
 	return
 }

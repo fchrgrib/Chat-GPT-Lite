@@ -1,8 +1,8 @@
 package main
 
 import (
-	"backend/utils"
-	"fmt"
+	"backend/controller"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -20,9 +20,9 @@ func main() {
 	//	fmt.Printf("What would it mean to you if you got %s with your computer and %s on buying a new one?\n", matches[1], matches[2])
 	//}
 
-	pattern := "20/21/2001*2^6"
-
-	fmt.Println(utils.CheckCalculate(pattern))
+	//pattern := "23/10/2001"
+	//
+	//fmt.Println(utils.SearchDay(pattern))
 
 	//text := "The year 2022 is coming soon, but it's not as far away as 1999 or 2000."
 	//
@@ -30,4 +30,10 @@ func main() {
 	//matches := re.FindAllString(text, -1)
 	//
 	//fmt.Println(matches)
+
+	routes := gin.Default()
+
+	routes.POST(":id", controller.PostChat)
+
+	routes.Run()
 }

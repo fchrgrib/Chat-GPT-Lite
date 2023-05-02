@@ -1,10 +1,11 @@
 package models
 
 type Chat struct {
-	Id   string `json:"id"`
-	From string `json:"from"`
-	Chat string `json:"chat"`
-	Time string `json:"time"`
+	IdHistoryChat string `json:"idHistoryChat"`
+	IdChat        string `json:"id_chat" gorm:"primaryKey"`
+	From          string `json:"from"`
+	Chat          string `json:"chat"`
+	Time          string `json:"time"`
 }
 
 type ChatHistory struct {
