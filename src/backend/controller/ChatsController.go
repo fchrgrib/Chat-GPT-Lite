@@ -206,9 +206,9 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	//TODO make reply chat using KM and BM
+	//TODO: make reply chat using KM and BM
 
 	return
 }
 
-//TODO make GET request to get all chats
+//TODO: make GET request to get all chats
