@@ -8,7 +8,7 @@ import (
 )
 
 func GetDatabase() (*gorm.DB, error) {
-	sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(172.19.160.1:3306)/chatGPT")
+	sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(172.19.160.1:3306)/chatgpt")
 
 	if err != nil {
 		return nil, err

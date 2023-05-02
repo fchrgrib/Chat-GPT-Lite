@@ -1,7 +1,10 @@
 package models
 
+import "time"
+
 type QuestAns struct {
-	id       string `json:"id"`
-	question string `json:"question"`
-	answer   string `json:"answer"`
+	Id         string    `json:"id" gorm:"primaryKey"`
+	Question   string    `json:"question"`
+	Answer     string    `json:"answer"`
+	TimeCreate time.Time `json:"timeCreate"`
 }
