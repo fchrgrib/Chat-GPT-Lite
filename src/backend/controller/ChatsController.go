@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func PostChat(c *gin.Context) {
+func PostChatsController(c *gin.Context) {
 	var chatFromUser models.Chat
 	var chatFromBot models.Chat
 
@@ -48,6 +48,7 @@ func PostChat(c *gin.Context) {
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
 			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
+			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
 
@@ -69,6 +70,7 @@ func PostChat(c *gin.Context) {
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
 			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
+			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
 
@@ -98,6 +100,7 @@ func PostChat(c *gin.Context) {
 				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          matches1 + " sudah ada pada database, tetapi jawaban akan diganti dengan " + matches2,
+				Type:          chatFromUser.Type,
 				Time:          time.Now().Local().String(),
 			}
 
@@ -124,7 +127,8 @@ func PostChat(c *gin.Context) {
 			IdChat:        uuid.New().String(),
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
-			Chat:          "Pertanyaan " + matches1 + " telah ditambah",
+			Chat:          "Pertanyaan " + matches1 + " telah ditambahkan",
+			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
 
@@ -155,6 +159,7 @@ func PostChat(c *gin.Context) {
 				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          "Pertanyaan " + question + " tidak ditemukan di database",
+				Type:          chatFromUser.Type,
 				Time:          time.Now().Local().String(),
 			}
 
@@ -175,6 +180,7 @@ func PostChat(c *gin.Context) {
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
 			Chat:          "Pertanyaan " + question + " telah dihapus",
+			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
 
@@ -184,11 +190,25 @@ func PostChat(c *gin.Context) {
 			})
 			return
 		}
+
+		var questAns models.QuestAns
+
+		if err := db.Where("question = ?", question).Delete(questAns); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error,
+			})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status": "ok",
 		})
 		return
 	}
 
+	//TODO make reply chat using KM and BM
+
 	return
 }
+
+//TODO make GET request to get all chats

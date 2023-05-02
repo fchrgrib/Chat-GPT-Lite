@@ -33,7 +33,7 @@ func CheckCalculate(input string) (bool, string) {
 }
 
 func CheckInsertQuesAns(input string) (isInsert, isQuesSame bool, matches1, matches2 string) {
-	pattern := "Tambahkan pertanyan (.+) dengan jawaban (.+)"
+	pattern := "Tambahkan pertanyaan (.+) dengan jawaban (.+)"
 
 	re := regexp.MustCompile(pattern)
 	matches := re.FindStringSubmatch(input)
@@ -60,7 +60,7 @@ func CheckInsertQuesAns(input string) (isInsert, isQuesSame bool, matches1, matc
 }
 
 func CheckEraseQues(input string) (isAsk, isFound bool, quest string) {
-	pattern := "Hapus pertanyan (.+)"
+	pattern := "Hapus pertanyaan (.+)"
 
 	re := regexp.MustCompile(pattern)
 	matches := re.FindStringSubmatch(input)
@@ -81,6 +81,8 @@ func CheckEraseQues(input string) (isAsk, isFound bool, quest string) {
 	if _ = _db.Where("question = ?", matches[1]).First(&question); len(question.Question) != 0 {
 		_ = _db.Delete(question)
 		isFound = true
+		quest = question.Question
+		return
 	}
 	quest = question.Question
 	isFound = false

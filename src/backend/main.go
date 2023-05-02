@@ -33,7 +33,7 @@ func main() {
 
 	routes := gin.Default()
 
-	routes.POST(":id", controller.PostChat)
+	routes.POST(":id", controller.PostChatsController)
 
 	routes.Run()
 }
