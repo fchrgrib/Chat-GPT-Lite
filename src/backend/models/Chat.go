@@ -1,7 +1,7 @@
 package models
 
 type Chat struct {
-	Id   string `json:"id" gorm:"primaryKey"`
+	Id   string `json:"id"`
 	From string `json:"from"`
 	Chat string `json:"chat"`
 	Time string `json:"time"`
