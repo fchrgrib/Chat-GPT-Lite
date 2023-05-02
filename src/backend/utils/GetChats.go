@@ -6,7 +6,7 @@ import (
 )
 
 func GetChats(id string) (models.ListChats, error) {
-	var chats []models.Chat
+	var chats models.ListChats
 
 	db, err := db2.GetDatabase()
 
@@ -14,13 +14,9 @@ func GetChats(id string) (models.ListChats, error) {
 		return models.ListChats{}, err
 	}
 
-	if err := db.Where("id = ?", id).Find(&chats); err.Error != nil {
+	if err := db.Where("id = ?", id).Order("time").Find(&chats); err.Error != nil {
 		return models.ListChats{}, err.Error
 	}
 
-	allChats := models.ListChats{
-		ListChat: chats,
-	}
-
-	return allChats, nil
+	return chats, nil
 }
