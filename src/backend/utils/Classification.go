@@ -20,7 +20,7 @@ func CheckDate(input string) (bool, string) {
 }
 
 func CheckCalculate(input string) (bool, string) {
-	pattern := `^[\d*/+\-^]*$`
+	pattern := `^[\d*/+\-^()]*$`
 
 	re := regexp.MustCompile(pattern)
 	matches := re.MatchString(input)
