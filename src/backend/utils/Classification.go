@@ -53,6 +53,7 @@ func CheckInsertQuesAns(input string) (isInsert, isQuesSame bool, matches1, matc
 
 	if _ = _db.Where("question = ?", matches1).First(&question); len(question.Question) != 0 {
 		isQuesSame = true
+		return
 	}
 	isQuesSame = false
 
