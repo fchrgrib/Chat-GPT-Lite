@@ -11,9 +11,10 @@ import (
 	"time"
 )
 
-func KMPController(c *gin.Context, chat string, idHistory string) {
+func KMPController(c *gin.Context, chatFromUser models.Chat) {
 	var questAns, temp []models.QuestAns
 	var chatFromBot models.Chat
+	var chatHistory models.ChatHistory
 
 	db, err := db2.GetDatabase()
 
@@ -32,12 +33,12 @@ func KMPController(c *gin.Context, chat string, idHistory string) {
 	}
 
 	for _, value := range questAns {
-		idx, similiarity := algorithm.KMP(chat, value.Question)
+		idx, similiarity := algorithm.KMP(chatFromUser.Chat, value.Question)
 
 		if idx != -1 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
-				IdHistoryChat: idHistory,
+				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "KMP",
@@ -45,6 +46,22 @@ func KMPController(c *gin.Context, chat string, idHistory string) {
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			chatHistory.LastChat = chatFromBot.Chat
+
+			chatHistory.UpdateAt = time.Now().Local().String()
+
+			if err := db.Save(chatHistory); err.Error != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"status": err.Error.Error(),
 				})
@@ -60,7 +77,7 @@ func KMPController(c *gin.Context, chat string, idHistory string) {
 		if similiarity > 90 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
-				IdHistoryChat: idHistory,
+				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "KMP",
@@ -96,11 +113,27 @@ func KMPController(c *gin.Context, chat string, idHistory string) {
 
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
-			IdHistoryChat: idHistory,
+			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
 			Chat:          result,
 			Type:          "KMP",
 			Time:          time.Now().Local().String(),
+		}
+		if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -118,11 +151,26 @@ func KMPController(c *gin.Context, chat string, idHistory string) {
 
 	chatFromBot = models.Chat{
 		IdChat:        uuid.New().String(),
-		IdHistoryChat: idHistory,
+		IdHistoryChat: chatFromUser.IdHistoryChat,
 		From:          "bot",
 		Chat:          "pertanyaan anda tidak ada di database",
 		Type:          "KMP",
 		Time:          time.Now().Local().String(),
+	}
+	if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": err.Error.Error(),
+		})
+		return
+	}
+	chatHistory.LastChat = chatFromBot.Chat
+	chatHistory.UpdateAt = time.Now().Local().String()
+
+	if err := db.Save(chatHistory); err.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": err.Error.Error(),
+		})
+		return
 	}
 
 	if err := db.Create(chatFromBot); err.Error != nil {

@@ -69,6 +69,7 @@ func CheckEraseQues(input string) (isAsk, isFound bool, quest string) {
 		isAsk = true
 	} else {
 		isAsk = false
+		return
 	}
 
 	_db, err := db.GetDatabase()

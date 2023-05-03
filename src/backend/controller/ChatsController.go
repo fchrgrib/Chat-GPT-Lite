@@ -306,10 +306,13 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	if chatFromUser.Type == "KM" {
-		KMPController(c, chatFromUser.Chat, chatFromUser.IdHistoryChat)
-	} else {
-		BMController(c, chatFromUser.Chat, chatFromUser.IdHistoryChat)
+	if chatFromUser.Type == "KMP" {
+		KMPController(c, chatFromUser)
+		return
+	}
+	if chatFromUser.Type == "BM" {
+		BMController(c, chatFromUser)
+		return
 	}
 
 	c.JSON(http.StatusBadRequest, gin.H{
