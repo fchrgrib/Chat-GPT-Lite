@@ -8,7 +8,7 @@ import (
 )
 
 func GetDatabase() (*gorm.DB, error) {
-	sqlDb, err := sql.Open("mysql", "fchrgrib2310:Fchrgrib2310*@tcp(192.168.43.236:3306)/chatgpt")
+	sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(localhost:3306)/chatgpt")
 
 	if err != nil {
 		return nil, err
@@ -25,7 +25,6 @@ func GetDatabase() (*gorm.DB, error) {
 	if err := db.AutoMigrate(
 		&models.Chat{},
 		&models.QuestAns{},
-		&models.ListChats{},
 		&models.ChatHistory{},
 	); err != nil {
 		return nil, err
