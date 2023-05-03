@@ -14,6 +14,7 @@ import (
 func PostChatsController(c *gin.Context) {
 	var chatFromUser models.Chat
 	var chatFromBot models.Chat
+	var chatHistory models.ChatHistory
 
 	db, err := db2.GetDatabase()
 
@@ -58,6 +59,23 @@ func PostChatsController(c *gin.Context) {
 			})
 			return
 		}
+
+		if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status": "ok",
 		})
@@ -80,6 +98,23 @@ func PostChatsController(c *gin.Context) {
 			})
 			return
 		}
+
+		if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
 		c.JSON(http.StatusOK, gin.H{
 			"status": "ok",
 		})
@@ -111,6 +146,22 @@ func PostChatsController(c *gin.Context) {
 				return
 			}
 
+			if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			chatHistory.LastChat = chatFromBot.Chat
+			chatHistory.UpdateAt = time.Now().Local().String()
+
+			if err := db.Save(chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+
 			if err := utils.UpdateAnswer(matches1, matches2); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{
 					"status": err.Error(),
@@ -133,6 +184,22 @@ func PostChatsController(c *gin.Context) {
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
+		if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"status": err.Error.Error(),
 			})
@@ -169,6 +236,23 @@ func PostChatsController(c *gin.Context) {
 				})
 				return
 			}
+
+			if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			chatHistory.LastChat = chatFromBot.Chat
+			chatHistory.UpdateAt = time.Now().Local().String()
+
+			if err := db.Save(chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+
 			c.JSON(http.StatusOK, gin.H{
 				"status": "ok",
 			})
@@ -185,6 +269,22 @@ func PostChatsController(c *gin.Context) {
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
+		if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"status": err.Error.Error(),
 			})

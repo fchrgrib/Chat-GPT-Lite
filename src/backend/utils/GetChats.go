@@ -14,7 +14,7 @@ func GetChats(id string) ([]models.Chat, error) {
 		return nil, err
 	}
 
-	if err := db.Table("chats").Where("id = ?", id).Order("time").Find(&chats); err.Error != nil {
+	if err := db.Table("chats").Where("id_history_chat = ?", id).Order("time").Find(&chats); err.Error != nil {
 		return nil, err.Error
 	}
 
@@ -30,7 +30,7 @@ func GetHistoryChats() ([]models.ChatHistory, error) {
 		return nil, err
 	}
 
-	if err := db.Table("chat_histories").Order("time").Find(&chats); err.Error != nil {
+	if err := db.Table("chat_histories").Find(&chats); err.Error != nil {
 		return nil, err.Error
 	}
 
