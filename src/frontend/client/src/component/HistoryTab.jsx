@@ -3,10 +3,10 @@ import io from 'socket.io-client'
 const socket = io.connect("https://localhost:3001");
 
 
-function HistoryTab() {
+function HistoryTab({HistoryData}) {
   return (
     <div className='history-tab'>
-        HistoryTab
+        {HistoryData}
     </div>
   )
 }

@@ -9,10 +9,23 @@ function InputBar({childToParent}) {
 
   const handleKeyDown = (event) => {
     if(event.key === 'Enter') {
-      setMessage(event.target.value);
-      childToParent(message);
+      fetch('http://localhost:3000/Chats', {
+        method: 'POST',
+        body: JSON.stringify({
+          id: Math.random().toString(36).slice(2),
+          from: "user",
+          chat: event.target.value
+        }),
+        headers: {"Content-Type" : "application/json"}
+      })
+      console.log(event.target.value);
+      event.target.value = ""
+
+      console.log("REQUETS HAS BEEN SENT")
+      childToParent(true);
     }
   }
+
   return (
     <div className='inputbar'>
         <input type='text' name="message" placeholder='Masukan pertanyaan disini' onChange={handleChange} onKeyDown={handleKeyDown}/>
