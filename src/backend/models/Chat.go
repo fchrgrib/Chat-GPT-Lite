@@ -16,12 +16,3 @@ type ChatHistory struct {
 	UpdateAt string `json:"updateAt"`
 	Chat     []Chat `gorm:"constraint:OnDelete:CASCADE;"`
 }
-
-type ListChatHistory struct {
-	ListHistory []ChatHistory `json:"listHistory"`
-}
-
-type ListChats struct {
-	Id       string `json:"id" gorm:"primaryKey"'`
-	ListChat []Chat
-}
