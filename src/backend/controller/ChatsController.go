@@ -206,7 +206,15 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	//TODO: make reply chat using KM and BM
+	if chatFromUser.Type == "KM" {
+		KMPController(c, chatFromUser.Chat, chatFromUser.IdHistoryChat)
+	} else {
+		BMController(c, chatFromUser.Chat, chatFromUser.IdHistoryChat)
+	}
+
+	c.JSON(http.StatusBadRequest, gin.H{
+		"status": "BadRequest",
+	})
 
 	return
 }
