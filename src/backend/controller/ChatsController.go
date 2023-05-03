@@ -42,12 +42,12 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	if isCalculate, numbers := utils.CheckCalculate(chatFromUser.Chat); isCalculate {
+	if isDate, date := utils.CheckDate(chatFromUser.Chat); isDate {
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
-			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
+			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
 			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
@@ -64,12 +64,12 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	if isDate, date := utils.CheckDate(chatFromUser.Chat); isDate {
+	if isCalculate, numbers := utils.CheckCalculate(chatFromUser.Chat); isCalculate {
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
-			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
+			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
 			Type:          chatFromUser.Type,
 			Time:          time.Now().Local().String(),
 		}
@@ -219,4 +219,28 @@ func PostChatsController(c *gin.Context) {
 	return
 }
 
-//TODO: make GET request to get all chats
+func GetChatsController(c *gin.Context) {
+	chats, _ := utils.GetChats(c.Param("id"))
+	history, _ := utils.GetHistoryChats()
+
+	c.JSON(http.StatusOK, gin.H{
+		"id_history": c.Param("id"),
+		"chats":      chats,
+		"history":    history,
+	})
+
+	return
+}
+
+func FirstPage(c *gin.Context) {
+	var chats []models.Chat
+	history, _ := utils.GetHistoryChats()
+
+	c.JSON(http.StatusOK, gin.H{
+		"id_history": c.Param("id"),
+		"chats":      chats,
+		"history":    history,
+	})
+
+	return
+}

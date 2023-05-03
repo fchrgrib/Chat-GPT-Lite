@@ -5,17 +5,33 @@ import (
 	"backend/models"
 )
 
-func GetChats(id string) (models.ListChats, error) {
-	var chats models.ListChats
+func GetChats(id string) ([]models.Chat, error) {
+	var chats []models.Chat
 
 	db, err := db2.GetDatabase()
 
 	if err != nil {
-		return models.ListChats{}, err
+		return nil, err
 	}
 
-	if err := db.Where("id = ?", id).Order("time").Find(&chats); err.Error != nil {
-		return models.ListChats{}, err.Error
+	if err := db.Table("chats").Where("id = ?", id).Order("time").Find(&chats); err.Error != nil {
+		return nil, err.Error
+	}
+
+	return chats, nil
+}
+
+func GetHistoryChats() ([]models.ChatHistory, error) {
+	var chats []models.ChatHistory
+
+	db, err := db2.GetDatabase()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if err := db.Table("chat_histories").Order("time").Find(&chats); err.Error != nil {
+		return nil, err.Error
 	}
 
 	return chats, nil
