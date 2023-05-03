@@ -4,6 +4,7 @@ import (
 	"backend/algorithm"
 	db2 "backend/db"
 	"backend/models"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
@@ -11,9 +12,10 @@ import (
 	"time"
 )
 
-func BMController(c *gin.Context, chat string, idHistory string) {
+func BMController(c *gin.Context, chatFromUser models.Chat) {
 	var questAns, temp []models.QuestAns
 	var chatFromBot models.Chat
+	var chatHistory models.ChatHistory
 
 	db, err := db2.GetDatabase()
 
@@ -32,12 +34,12 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 	}
 
 	for _, value := range questAns {
-		idx, similiarity := algorithm.BM(chat, value.Question)
+		idx, similiarity := algorithm.BM(chatFromUser.Chat, value.Question)
 
 		if idx != -1 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
-				IdHistoryChat: idHistory,
+				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "BM",
@@ -45,6 +47,22 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			if err := db.Table("chat_histories").Where("id", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"status": err.Error.Error(),
+				})
+				return
+			}
+			chatHistory.LastChat = chatFromBot.Chat
+
+			chatHistory.UpdateAt = time.Now().Local().String()
+
+			if err := db.Save(chatHistory); err.Error != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"status": err.Error.Error(),
 				})
@@ -60,7 +78,7 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 		if similiarity > 90 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
-				IdHistoryChat: idHistory,
+				IdHistoryChat: chatFromUser.IdHistoryChat,
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "BM",
@@ -96,11 +114,27 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
-			IdHistoryChat: idHistory,
+			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
 			Chat:          result,
 			Type:          "BM",
 			Time:          time.Now().Local().String(),
+		}
+		if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+
+		chatHistory.UpdateAt = time.Now().Local().String()
+
+		if err := db.Save(chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -118,11 +152,26 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 
 	chatFromBot = models.Chat{
 		IdChat:        uuid.New().String(),
-		IdHistoryChat: idHistory,
+		IdHistoryChat: chatFromUser.IdHistoryChat,
 		From:          "bot",
 		Chat:          "pertanyaan anda tidak ada di database",
 		Type:          "BM",
 		Time:          time.Now().Local().String(),
+	}
+	if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": err.Error.Error(),
+		})
+		return
+	}
+	chatHistory.LastChat = chatFromBot.Chat
+	chatHistory.UpdateAt = time.Now().Local().String()
+
+	if err := db.Save(chatHistory); err.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status": err.Error.Error(),
+		})
+		return
 	}
 
 	if err := db.Create(chatFromBot); err.Error != nil {
@@ -135,5 +184,7 @@ func BMController(c *gin.Context, chat string, idHistory string) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})
+	fmt.Println(chatHistory.LastChat)
+	fmt.Println("haaaaaaaaaaaaaaaaaaaaa")
 	return
 }

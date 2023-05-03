@@ -10,6 +10,8 @@ import (
 func GetDatabase() (*gorm.DB, error) {
 	sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(localhost:3306)/chatgpt")
 
+	//sqlDb, err := sql.Open("postgres", "user=postgres password=Fchrgrib2310* host=db.yeiajanscvcinnhtrzfw.supabase.co port=5432 dbname=postgres")
+
 	if err != nil {
 		return nil, err
 	}
