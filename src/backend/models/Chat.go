@@ -17,6 +17,7 @@ type ListChatHistory struct {
 	ListHistory []ChatHistory `json:"listHistory"`
 }
 
+
 type ListChats struct {
 	Id       string `json:"id" gorm:"primaryKey"'`
 	ListChat []Chat
