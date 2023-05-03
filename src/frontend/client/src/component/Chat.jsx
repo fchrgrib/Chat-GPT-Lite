@@ -3,7 +3,7 @@ import InputBar from './InputBar'
 import Conversation from './Conversation'
 import { useState } from 'react'
 
-function Chat() {
+function Chat({chatID, algo}) {
   
   const[data, setData] = useState('');
 
@@ -15,10 +15,14 @@ function Chat() {
     setData(childData);
     //alert(childData);
   }
+  // if(chatID === 0){
+  //   return <p>WELCOME BOIS</p>
+  // }
+
   return (
     <div className='chat'>
-        <Conversation parentToChild={data}/>
-        <InputBar childToParent={childToParent}/>
+        <Conversation chatID={chatID}/>
+        <InputBar chatID={chatID} algo={algo}/>
     </div>
   )
 }

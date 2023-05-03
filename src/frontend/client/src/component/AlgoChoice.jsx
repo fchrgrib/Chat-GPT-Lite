@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-function AlgoChoice() {
+function AlgoChoice({algoData}) {
+  const [algo, setAlgo] = useState('')
+
   return (
     <div className='algoChoice'>
-        <hr class="solid"></hr>
+        <hr className="solid"></hr>
         <div className='algo-buttons'>
             <div className='KMPButton'>
-                <input type="radio" value="KMP" name="algo" /> KMP
+                <input type="radio" value="KMP" name="algo" onChange={e => algoData(e.target.value)} defaultChecked/> KMP
             </div>
             <div className='BMButton'>
-                <input type="radio" value="BM" name="algo" /> BM
+                <input type="radio" value="BM" name="algo" onChange={e => algoData(e.target.value)}/> BM
             </div>
         </div>
     </div>

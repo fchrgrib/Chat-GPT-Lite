@@ -3,14 +3,25 @@ import MessageBubbleRight from './MessageBubbleRight'
 import MessageBubbleLeft from './MessageBubbleLeft'
 import { useEffect, useState } from 'react';
 
-function Conversation({parentToChild}) {
+function Conversation({chatID}) {
   // const [file, getFile] = useState
   const[data, setData] = useState([]);
-  const API = 'http://localhost:3000/Chats'
+  const API = 'chat/' + chatID
   const fetchChats = () => {
-    fetch(API).then((res) => res.json()).then((res) => {
-      console.log(res);
-      setData(res);
+    // fetch(API).then((res) => res.json()).then((resChats) => {
+    //   //console.log(res);
+    //   //console.log("This is the id: " + chatID)
+    //   setData(resChats.chats);
+    //   console.log(data)
+    // })
+
+    fetch(API).then((res) => {
+      //console.log("Ini data fetch sebelum jadi json: " + res);
+      return res.json();
+    }).then((resAfter) => {
+      // console.log("Ini data fetch setelah jadi json: " + res);
+      setData(resAfter.chats);
+      console.log(data)
     })
   }
 
@@ -28,11 +39,12 @@ function Conversation({parentToChild}) {
     <div className='conversation'>
       {
         data && data.map((item) => {
-          if(item.from === "user"){
-            return <MessageBubbleRight dataToMessage={item.chat}/>
-          }else{
-            return <MessageBubbleLeft dataToMessage={item.chat}/>
-          }
+            if(item.from === "user"){
+              return <MessageBubbleRight dataToMessage={item.chat}/>
+            }else{
+              return <MessageBubbleLeft dataToMessage={item.chat}/>
+            }
+          
         })
       }
         <div className='flex-container'></div>
