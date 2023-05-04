@@ -8,9 +8,11 @@ import (
 )
 
 func GetDatabase() (*gorm.DB, error) {
-	sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(localhost:3306)/chatgpt")
+	//sqlDb, err := sql.Open("mysql", "root:Fchrgrib2310*@tcp(localhost:3306)/chatgpt")
 
-	//sqlDb, err := sql.Open("postgres", "user=postgres password=Fchrgrib2310* host=db.yeiajanscvcinnhtrzfw.supabase.co port=5432 dbname=postgres")
+	sqlDb, err := sql.Open("mysql", "root:jE9nkshB0SbXDRqbj3KK@tcp(containers-us-west-178.railway.app:7240)/railway")
+
+	//sqlDb, err := sql.Open("mysql", "cau16diyel4vzj2b:insrrqyxdjkfw6hv@tcp(lfmerukkeiac5y5w.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306)/ibo4dp9c0tuurvvg")
 
 	if err != nil {
 		return nil, err
