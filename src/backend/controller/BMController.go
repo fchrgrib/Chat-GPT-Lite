@@ -5,7 +5,6 @@ import (
 	db2 "backend/db"
 	"backend/models"
 	"backend/utils"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
@@ -184,7 +183,6 @@ func BMController(c *gin.Context, chatFromUser models.Chat) {
 	c.JSON(http.StatusOK, gin.H{
 		"status": "ok",
 	})
-	fmt.Println(chatHistory.LastChat)
-	fmt.Println("haaaaaaaaaaaaaaaaaaaaa")
+
 	return
 }
