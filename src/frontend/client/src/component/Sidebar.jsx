@@ -8,6 +8,7 @@ function Sidebar({chatHistory, algorithm}) {
   const[data, setData] = useState([]);
 
   const API = 'chat'
+  const APIput = API + '/add_chat'
   const fetchHistory = () => {
     fetch(API).then((res) => {
       //console.log("Ini data fetch sebelum jadi json: " + res);
@@ -20,8 +21,10 @@ function Sidebar({chatHistory, algorithm}) {
 
   useEffect(() => {
     //console.log("use effect in progress")
-    fetchHistory()
-  }, [data]);
+    setInterval(()=>{
+      fetchHistory()
+    }, 2000)
+  }, []);
 
   const algoData = (data) => {
     setAlgo(data);
@@ -30,7 +33,10 @@ function Sidebar({chatHistory, algorithm}) {
   }
 
   const createSession = () => {
-
+    fetch(APIput, {
+      method: 'PUT',
+      headers: {"Content-Type" : "application/json"}
+    })
   }
 
   return (

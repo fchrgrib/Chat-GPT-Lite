@@ -29,8 +29,10 @@ function App() {
 
   useEffect(() => {
     //console.log("use effect in progress")
-    fetchHistory()
-  }, [data]);
+    setInterval(()=>{
+      fetchHistory()
+    }, 2000)
+  }, []);
 
   return (
     <div className="App">

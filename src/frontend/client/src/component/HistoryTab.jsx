@@ -23,7 +23,6 @@ function HistoryTab({HistoryData, historyDesc}) {
     return (
       <div className='text-container current'>
         <div className='history-tab'>
-          Hello
             {HistoryData.lastChat}
         </div>
         <button onClick={deleteRequest}>Clear</button>
