@@ -17,7 +17,7 @@ func InsertQuestionAnswer(question, answer string) error {
 		Id:         uuid.New().String(),
 		Question:   question,
 		Answer:     answer,
-		TimeCreate: utils.GetJktTimeZone(),
+		TimeCreate: GetJktTimeZone(),
 	}
 
 	if err := _db.Create(questAns); err.Error != nil {
@@ -38,7 +38,7 @@ func UpdateAnswer(question, answer string) error {
 	}
 
 	questAns.Answer = answer
-	questAns.TimeCreate = utils.GetJktTimeZone()
+	questAns.TimeCreate = GetJktTimeZone()
 
 	_db.Save(questAns)
 
