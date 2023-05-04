@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -32,10 +33,11 @@ func BMController(c *gin.Context, chatFromUser models.Chat) {
 		return
 	}
 
+	limitSimilar := 0
 	for _, value := range questAns {
-		idx, similiarity := algorithm.BM(chatFromUser.Chat, value.Question)
+		idx, similarity := algorithm.BM(chatFromUser.Chat, value.Question)
 
-		if idx != -1 {
+		if idx != -1 && similarity == 100 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
 				IdHistoryChat: chatFromUser.IdHistoryChat,
@@ -74,7 +76,7 @@ func BMController(c *gin.Context, chatFromUser models.Chat) {
 			return
 		}
 
-		if similiarity > 90 {
+		if similarity >= 90 {
 			chatFromBot = models.Chat{
 				IdChat:        uuid.New().String(),
 				IdHistoryChat: chatFromUser.IdHistoryChat,
@@ -97,16 +99,18 @@ func BMController(c *gin.Context, chatFromUser models.Chat) {
 			return
 		}
 
-		if similiarity < 80 {
+		if similarity < 90 && idx != -1 && limitSimilar < 3 {
 			temp = append(temp, value)
+			limitSimilar++
 		}
 	}
 
 	if len(temp) != 0 {
 		var similar []string
+		similar = append(similar, "maksud anda :")
 
 		for idx, value := range temp {
-			similar = append(similar, string(idx+1)+". "+value.Question)
+			similar = append(similar, strconv.Itoa(idx+1)+". "+value.Question)
 		}
 
 		result := strings.Join(similar, "\n")
