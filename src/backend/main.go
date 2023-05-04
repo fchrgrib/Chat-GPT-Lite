@@ -17,4 +17,5 @@ func main() {
 	rGroup.POST("/:id/post_chat", controller.PostChatsController)
 
 	routes.Run()
+
 }

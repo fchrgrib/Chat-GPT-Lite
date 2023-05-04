@@ -8,7 +8,6 @@ import (
 	"github.com/google/uuid"
 	"net/http"
 	"strings"
-	"time"
 )
 
 func KMPController(c *gin.Context, chatFromUser models.Chat) {
@@ -42,7 +41,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "KMP",
-				Time:          time.Now().Local().String(),
+				Time:          utils.GetJktTimeZone(),
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
@@ -59,7 +58,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 			}
 			chatHistory.LastChat = chatFromBot.Chat
 
-			chatHistory.UpdateAt = time.Now().Local().String()
+			chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 			if err := db.Save(chatHistory); err.Error != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
@@ -81,7 +80,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 				From:          "bot",
 				Chat:          value.Answer,
 				Type:          "KMP",
-				Time:          time.Now().Local().String(),
+				Time:          utils.GetJktTimeZone(),
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
@@ -117,7 +116,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 			From:          "bot",
 			Chat:          result,
 			Type:          "KMP",
-			Time:          time.Now().Local().String(),
+			Time:          utils.GetJktTimeZone(),
 		}
 		if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -127,7 +126,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 		}
 		chatHistory.LastChat = chatFromBot.Chat
 
-		chatHistory.UpdateAt = time.Now().Local().String()
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -155,7 +154,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 		From:          "bot",
 		Chat:          "pertanyaan anda tidak ada di database",
 		Type:          "KMP",
-		Time:          time.Now().Local().String(),
+		Time:          utils.GetJktTimeZone(),
 	}
 	if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -164,7 +163,7 @@ func KMPController(c *gin.Context, chatFromUser models.Chat) {
 		return
 	}
 	chatHistory.LastChat = chatFromBot.Chat
-	chatHistory.UpdateAt = time.Now().Local().String()
+	chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 	if err := db.Save(chatHistory); err.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

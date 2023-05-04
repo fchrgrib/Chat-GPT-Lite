@@ -4,7 +4,6 @@ import (
 	"backend/db"
 	"backend/models"
 	"github.com/google/uuid"
-	"time"
 )
 
 func InsertQuestionAnswer(question, answer string) error {
@@ -18,7 +17,7 @@ func InsertQuestionAnswer(question, answer string) error {
 		Id:         uuid.New().String(),
 		Question:   question,
 		Answer:     answer,
-		TimeCreate: time.Now().Local().String(),
+		TimeCreate: utils.GetJktTimeZone(),
 	}
 
 	if err := _db.Create(questAns); err.Error != nil {
@@ -39,7 +38,7 @@ func UpdateAnswer(question, answer string) error {
 	}
 
 	questAns.Answer = answer
-	questAns.TimeCreate = time.Now().Local().String()
+	questAns.TimeCreate = utils.GetJktTimeZone()
 
 	_db.Save(questAns)
 
