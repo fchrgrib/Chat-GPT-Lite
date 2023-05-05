@@ -31,19 +31,6 @@ function App() {
   const[req, setReq] = useState('');
   //const API = 'http://localhost:3000/ChatHistory'
   const API = 'chat'
-  const fetchHistory = async () => {
-    //console.log("fetch history before")
-    fetch(API).then((res) => {
-      //console.log("Ini data fetch sebelum jadi json: " + res);
-      return res.json();
-    }).then((resAfter) => {
-      // console.log("Ini data fetch setelah jadi json: " + res);
-      setData(resAfter.history);
-      setDef(resAfter)
-      // console.log("Here")
-      // console.log(data)
-    })
-  }
   
   // const {template} = useData(API);
   // const {data} = template.history;
@@ -63,6 +50,7 @@ function App() {
       setDef(fetched);
     }
     dataFetch();
+    console.log(data);
   }, []);
 
   if(data){

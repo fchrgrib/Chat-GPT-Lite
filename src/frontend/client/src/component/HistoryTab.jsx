@@ -12,10 +12,11 @@ function HistoryTab({HistoryData, historyDesc}) {
   const deleteRequest = async() => {
     //console.log("fetch history before")
     await fetch(API, { method: 'DELETE'})
-    navigate(navigateLink)
+    navigate(homeLink)
   }
   
   const historyClicked = () => {
+    console.log("CLICKED")
     console.log("History " + HistoryData.id + " has been clicked")
     navigate(navigateLink)
   }

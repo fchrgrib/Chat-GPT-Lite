@@ -1,30 +1,26 @@
-import React from 'react'
+import React, { useReducer } from 'react'
 import HistoryTab from './HistoryTab'
-import { useState, useEffect } from 'react';
+import { useState, useEffect} from 'react';
 
+const initialState = {
+  loading: true,
+  post: {}
+}
+
+const reducer = (state, action) => {
+  if(action.type == 'SUCCESS'){
+    return {
+      loading: false,
+      post: action.payload
+    }
+  }
+  return state
+}
 
 function History({chatHistory}) {
   const[data, setData] = useState([]);
-  // const API = 'http://localhost:3000/ChatHistory'
-  // const fetchHistory = () => {
-  //   fetch(API).then((res) => res.json()).then((res) => {
-  //     //console.log(res);
-  //     setData(res);
-  //   })
-  // }
+  const[state, dispatch] = useReducer(reducer, initialState)
   const API = 'chat'
-  const fetchHistory = () => {
-    //console.log("fetch history before")
-    fetch(API).then((res) => {
-      //console.log("Ini data fetch sebelum jadi json: " + res);
-      return res.json();
-    }).then((resAfter) => {
-      // console.log("Ini data fetch setelah jadi json: " + res);
-      setData(resAfter.history);
-      console.log("Here")
-      console.log(data)
-    })
-  }
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -33,13 +29,9 @@ function History({chatHistory}) {
       setData(fetched.history);
     }
     dataFetch();
-    //fetchHistory()
-  }, []);
 
-  // while(!data){
-  //   console.log("Fetching failed history data")
-  //   fetchHistory()
-  // }
+  }, [data]);
+
 
 
   return (

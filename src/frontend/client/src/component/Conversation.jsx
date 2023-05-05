@@ -3,39 +3,30 @@ import MessageBubbleRight from './MessageBubbleRight'
 import MessageBubbleLeft from './MessageBubbleLeft'
 import { useEffect, useState } from 'react';
 
-function Conversation({chatID}) {
+function Conversation({chatID, triggerSignal}) {
   // const [file, getFile] = useState
   const[data, setData] = useState('');
   const API = 'chat/' + chatID
-  const fetchChats = () => {
-    // fetch(API).then((res) => res.json()).then((resChats) => {
-    //   //console.log(res);
-    //   //console.log("This is the id: " + chatID)
-    //   setData(resChats.chats);
-    //   console.log(data)
-    // })
 
-    fetch(API).then((res) => {
-      //console.log("Ini data fetch sebelum jadi json: " + res);
-      return res.json();
-    }).then((resAfter) => {
-      // console.log("Ini data fetch setelah jadi json: " + res);
-      setData(resAfter.chats);
-      console.log(data)
-    })
+  const dataFetch = async () => {
+    const fetched = await (await fetch(API)).json();
+
+    setData(fetched.chats);
+    //console.log("CONVERSATION ID: " + chatID)
+    console.log(fetched);
   }
 
   useEffect(() => {
-    const dataFetch = async () => {
-      const fetched = await (await fetch(API)).json();
-
-      setData(fetched.chats);
-      //console.log("CONVERSATION ID: " + chatID)
-      console.log(fetched);
-    }
+    console.log("CONVERSATION CHNAGE")
     dataFetch();
+    console.log("CHANGED")
     // fetchChats()
-  }, [API]);
+  }, [data]);
+
+  // useEffect(() => {
+    
+  //   dataFetch();
+  // },[triggerSignal])
 
   // while(!data){
   //   console.log("Fetching failed conversation data")

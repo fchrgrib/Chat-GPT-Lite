@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { useState } from 'react'
 
-function InputBar({chatID, algo}) {
+function InputBar({chatID, algo, triggerSignal}) {
   const [dataAlgo, setDataAlgo] = useState('');
   const [message, setMessage] = useState('');
+  const [trigger, setTrigger] = useState(0);
   const handleChange = (event) => {
     setMessage(event.target.value);
   }
@@ -31,7 +32,8 @@ function InputBar({chatID, algo}) {
       console.log(chatID);
       console.log("Entered chat: " + event.target.value);
       event.target.value = ""
-
+      setTrigger((trigger) => trigger + 1)
+      triggerSignal(trigger)
       console.log("REQUETS HAS BEEN SENT")
     }
   }
