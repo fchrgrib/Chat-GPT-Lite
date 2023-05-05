@@ -28,9 +28,15 @@ function History({chatHistory}) {
 
       setData(fetched.history);
     }
-    dataFetch();
 
-  }, [data]);
+    const interval = setInterval(() => {
+      console.log('This will be called every 1 seconds');
+      dataFetch();
+    }, 1000);
+
+    return () => clearInterval(interval);
+
+  }, []);
 
 
 

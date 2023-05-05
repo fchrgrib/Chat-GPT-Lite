@@ -7,6 +7,7 @@ function Conversation({chatID, triggerSignal}) {
   // const [file, getFile] = useState
   const[data, setData] = useState('');
   const API = 'chat/' + chatID
+  const[trigger, setTrigger] = useState(triggerSignal)
 
   const dataFetch = async () => {
     const fetched = await (await fetch(API)).json();
@@ -17,8 +18,14 @@ function Conversation({chatID, triggerSignal}) {
   }
 
   useEffect(() => {
-    console.log("CONVERSATION CHNAGE")
     dataFetch();
+
+    const interval = setInterval(() => {
+      console.log('This will be called every 1 seconds');
+      dataFetch();
+    }, 1000);
+
+    return () => clearInterval(interval);
     console.log("CHANGED")
     // fetchChats()
   }, [data]);
