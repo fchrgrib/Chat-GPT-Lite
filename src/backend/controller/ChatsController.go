@@ -80,12 +80,12 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	if isDate, date := utils.CheckDate(chatFromUser.Chat); isDate {
+	if isCalculate, numbers := utils.CheckCalculate(chatFromUser.Chat); isCalculate {
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
-			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
+			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
 			Type:          chatFromUser.Type,
 			Time:          utils.GetJktTimeZone(),
 		}
@@ -119,12 +119,12 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
-	if isCalculate, numbers := utils.CheckCalculate(chatFromUser.Chat); isCalculate {
+	if isDate, date := utils.CheckDate(chatFromUser.Chat); isDate {
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
 			IdHistoryChat: chatFromUser.IdHistoryChat,
 			From:          "bot",
-			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
+			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
 			Type:          chatFromUser.Type,
 			Time:          utils.GetJktTimeZone(),
 		}

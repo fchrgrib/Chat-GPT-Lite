@@ -20,13 +20,22 @@ func CheckDate(input string) (bool, string) {
 }
 
 func CheckCalculate(input string) (bool, string) {
-	pattern := `^[\d*/+\-^()]*$`
+	pattern := "Hitunglah (.+)"
 
 	re := regexp.MustCompile(pattern)
-	matches := re.MatchString(input)
+	matches := re.FindStringSubmatch(input)
 
-	if matches {
-		return matches, input
+	if len(matches) == 0 {
+		return false, ""
+	}
+
+	mathPattern := `^[\d*/+\-^()]*$`
+
+	rex := regexp.MustCompile(mathPattern)
+	matchesx := rex.MatchString(matches[1])
+
+	if matchesx {
+		return matchesx, matches[1]
 	}
 
 	return false, ""
