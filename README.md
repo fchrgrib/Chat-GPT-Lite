@@ -14,15 +14,19 @@ Program ini merupakan aplikasi ChatGPT sederhana yang dapat merespons pertanyaan
 Program dibuat dengan bahasa Golang untuk backend dan ReactJS untuk frontend
 
 ## Requirement
-1. Golang
-2. ReactJS
+- NPM
+
+Untuk menginstall NPM dapat mengunduh dari link berikut https://nodejs.org/en
+
 
 ## Cara Menjalankan Program di Lokal
-
+1. Buka terminal dan cd folder ```client``` atau buka terminal pada folder ```client``` yang terdapat pada folder frontend ```(src\frontend\client)```
+2. Ketik ```npm install``` (jika sudah menginstall, abaikan langkah ini)
+3. Ketik ```npm run start```
 
 
 ## Cara Menggunakan program
-Untuk menggunakan aplikasi, pengguna cukup mengetikkan pertanyaan/perintah pada chatbox lalu klik enter. Pengguna dapat merubah opsi algoritma yang digunakan dalam mencari jawaban. Pengguna juga dapat menambah sesi percakapan baru dan melihat sesi percakapan yang lama.
+Untuk menggunakan aplikasi, pertama-tama pengguna perlu memilih/membuat sesi percakapan. Setelah itu, pengguna dapat mengetikkan pertanyaan/perintah pada chat box dan mengirimnya dengan mengeklik enter. Pengguna dapat merubah opsi algoritma yang digunakan dalam mencari jawaban.
 
 
 ## Author
