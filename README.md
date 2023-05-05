@@ -2,6 +2,7 @@
 # Penerapan String Matching dan Regular Expression dalam Pembuatan ChatGPT Sederhana
 
 
+
 ## Deskripsi Singkat
 Program ini merupakan aplikasi ChatGPT sederhana yang dapat merespons pertanyaan/perintah dari pengguna. Pertanyaan/perintah yang dapat direspons ada lima jenis, yaitu:
 1. Pertanyaan yang ada di database
@@ -9,6 +10,7 @@ Program ini merupakan aplikasi ChatGPT sederhana yang dapat merespons pertanyaan
 3. Menentukan hari dari suatu tanggal
 4. Menambah pertanyaan dan jawaban ke database
 5. Menghapus pertanyaan dari database
+
 Program dibuat dengan bahasa Golang untuk backend dan ReactJS untuk frontend
 
 ## Requirement
