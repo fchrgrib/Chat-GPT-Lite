@@ -21,7 +21,7 @@ Untuk menginstall NPM dapat mengunduh dari link berikut https://nodejs.org/en
 
 ## Cara Menjalankan Program di Lokal
 1. Buka terminal dan cd folder ```client``` atau buka terminal pada folder ```client``` yang terdapat pada folder frontend ```(src\frontend\client)```
-2. Ketik ```npm install``` (jika sudah menginstall, abaikan langkah ini)
+2. Ketik ```npm install```
 3. Ketik ```npm run start```
 
 
