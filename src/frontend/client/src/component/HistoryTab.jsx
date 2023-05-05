@@ -37,7 +37,7 @@ function HistoryTab({HistoryData, historyDesc}) {
   return (
     <div className='text-container' key={HistoryData.id}>
       <div className='history-tab' onClick={historyClicked}>
-          {HistoryData.lastChat}
+          {HistoryData.lastChat==" " ? "This is a new chat!" : HistoryData.lastChat}
       </div>
     </div>
   )
