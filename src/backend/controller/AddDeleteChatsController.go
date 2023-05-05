@@ -23,7 +23,7 @@ func AddChats(c *gin.Context) {
 
 	chatHistory.Id = uuid.New().String()
 	chatHistory.UpdateAt = utils.GetJktTimeZone()
-	chatHistory.LastChat = ""
+	chatHistory.LastChat = " "
 
 	if err := db.Create(chatHistory); err.Error != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
