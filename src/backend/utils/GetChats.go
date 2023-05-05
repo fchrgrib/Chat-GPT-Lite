@@ -30,7 +30,7 @@ func GetHistoryChats() ([]models.ChatHistory, error) {
 		return nil, err
 	}
 
-	if err := db.Table("chat_histories").Find(&chats); err.Error != nil {
+	if err := db.Table("chat_histories").Order("update_at").Find(&chats); err.Error != nil {
 		return nil, err.Error
 	}
 

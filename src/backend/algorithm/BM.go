@@ -31,7 +31,7 @@ func BM(input string, text string) (int, float64) {
 	for {
 		if input[j] == text[i] {
 			if j == 0 {
-				return i, 100
+				return i, simLr
 			} else {
 				i--
 				j--

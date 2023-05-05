@@ -14,7 +14,8 @@ func main() {
 	rGroup.GET("/:id", controller.GetChatsController)
 	rGroup.PUT("/add_chat", controller.AddChats)
 	rGroup.DELETE("/:id/delete_chat", controller.DeleteChats)
-	rGroup.POST(":id/post_chat", controller.PostChatsController)
+	rGroup.POST("/:id/post_chat", controller.PostChatsController)
 
 	routes.Run()
+
 }

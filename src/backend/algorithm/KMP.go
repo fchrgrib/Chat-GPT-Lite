@@ -31,7 +31,7 @@ func KMP(input string, text string) (int, float64) {
 	for i < n {
 		if input[j] == text[i] {
 			if j == m-1 {
-				return i - m + 1, 100
+				return i - m + 1, simLr
 			}
 			i++
 			j++

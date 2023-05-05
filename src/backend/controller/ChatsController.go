@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
-	"time"
 )
 
 func PostChatsController(c *gin.Context) {
@@ -27,7 +26,7 @@ func PostChatsController(c *gin.Context) {
 	chatFromUser.IdHistoryChat = c.Param("id")
 	chatFromUser.From = "user"
 	chatFromUser.IdChat = uuid.New().String()
-	chatFromUser.Time = time.Now().Local().String()
+	chatFromUser.Time = utils.GetJktTimeZone()
 
 	if err := c.ShouldBindJSON(&chatFromUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -43,6 +42,44 @@ func PostChatsController(c *gin.Context) {
 		return
 	}
 
+	if chatFromUser.Type == "" {
+		chatFromBot = models.Chat{
+			IdChat:        uuid.New().String(),
+			IdHistoryChat: chatFromUser.IdHistoryChat,
+			From:          "bot",
+			Chat:          "Anda belum memasukkan tipe Algoritma KMP/BM, masukkan terlebih dahulu",
+			Type:          "",
+			Time:          utils.GetJktTimeZone(),
+		}
+		if err := db.Table("chat_histories").Where("id = ?", chatFromUser.IdHistoryChat).First(&chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+		chatHistory.LastChat = chatFromBot.Chat
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
+
+		if err := db.Save(chatHistory); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
+		if err := db.Create(chatFromBot); err.Error != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"status": err.Error.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{
+			"status": "ok",
+		})
+		return
+	}
+
 	if isDate, date := utils.CheckDate(chatFromUser.Chat); isDate {
 		chatFromBot = models.Chat{
 			IdChat:        uuid.New().String(),
@@ -50,7 +87,7 @@ func PostChatsController(c *gin.Context) {
 			From:          "bot",
 			Chat:          "Tanggal tersebut adalah hari " + (utils.SearchDay(date)),
 			Type:          chatFromUser.Type,
-			Time:          time.Now().Local().String(),
+			Time:          utils.GetJktTimeZone(),
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -67,7 +104,7 @@ func PostChatsController(c *gin.Context) {
 			return
 		}
 		chatHistory.LastChat = chatFromBot.Chat
-		chatHistory.UpdateAt = time.Now().Local().String()
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -89,7 +126,7 @@ func PostChatsController(c *gin.Context) {
 			From:          "bot",
 			Chat:          "Hasilnya adalah " + (algorithm.Calculate(numbers)),
 			Type:          chatFromUser.Type,
-			Time:          time.Now().Local().String(),
+			Time:          utils.GetJktTimeZone(),
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -106,7 +143,7 @@ func PostChatsController(c *gin.Context) {
 			return
 		}
 		chatHistory.LastChat = chatFromBot.Chat
-		chatHistory.UpdateAt = time.Now().Local().String()
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -127,7 +164,7 @@ func PostChatsController(c *gin.Context) {
 
 			_ = db.Where("question = ?", matches1).First(&questAns)
 			questAns.Answer = matches2
-			questAns.TimeCreate = time.Now().Local().String()
+			questAns.TimeCreate = utils.GetJktTimeZone()
 			db.Save(questAns)
 
 			chatFromBot = models.Chat{
@@ -136,7 +173,7 @@ func PostChatsController(c *gin.Context) {
 				From:          "bot",
 				Chat:          matches1 + " sudah ada pada database, tetapi jawaban akan diganti dengan " + matches2,
 				Type:          chatFromUser.Type,
-				Time:          time.Now().Local().String(),
+				Time:          utils.GetJktTimeZone(),
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
@@ -153,7 +190,7 @@ func PostChatsController(c *gin.Context) {
 				return
 			}
 			chatHistory.LastChat = chatFromBot.Chat
-			chatHistory.UpdateAt = time.Now().Local().String()
+			chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 			if err := db.Save(chatHistory); err.Error != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
@@ -180,7 +217,7 @@ func PostChatsController(c *gin.Context) {
 			From:          "bot",
 			Chat:          "Pertanyaan " + matches1 + " telah ditambahkan",
 			Type:          chatFromUser.Type,
-			Time:          time.Now().Local().String(),
+			Time:          utils.GetJktTimeZone(),
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -197,7 +234,7 @@ func PostChatsController(c *gin.Context) {
 			return
 		}
 		chatHistory.LastChat = chatFromBot.Chat
-		chatHistory.UpdateAt = time.Now().Local().String()
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
@@ -227,7 +264,7 @@ func PostChatsController(c *gin.Context) {
 				From:          "bot",
 				Chat:          "Pertanyaan " + question + " tidak ditemukan di database",
 				Type:          chatFromUser.Type,
-				Time:          time.Now().Local().String(),
+				Time:          utils.GetJktTimeZone(),
 			}
 
 			if err := db.Create(chatFromBot); err.Error != nil {
@@ -244,7 +281,7 @@ func PostChatsController(c *gin.Context) {
 				return
 			}
 			chatHistory.LastChat = chatFromBot.Chat
-			chatHistory.UpdateAt = time.Now().Local().String()
+			chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 			if err := db.Save(chatHistory); err.Error != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
@@ -265,7 +302,7 @@ func PostChatsController(c *gin.Context) {
 			From:          "bot",
 			Chat:          "Pertanyaan " + question + " telah dihapus",
 			Type:          chatFromUser.Type,
-			Time:          time.Now().Local().String(),
+			Time:          utils.GetJktTimeZone(),
 		}
 
 		if err := db.Create(chatFromBot); err.Error != nil {
@@ -282,7 +319,7 @@ func PostChatsController(c *gin.Context) {
 			return
 		}
 		chatHistory.LastChat = chatFromBot.Chat
-		chatHistory.UpdateAt = time.Now().Local().String()
+		chatHistory.UpdateAt = utils.GetJktTimeZone()
 
 		if err := db.Save(chatHistory); err.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{

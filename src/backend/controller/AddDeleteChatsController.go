@@ -3,10 +3,10 @@ package controller
 import (
 	db2 "backend/db"
 	"backend/models"
+	"backend/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
-	"time"
 )
 
 func AddChats(c *gin.Context) {
@@ -22,7 +22,7 @@ func AddChats(c *gin.Context) {
 	}
 
 	chatHistory.Id = uuid.New().String()
-	chatHistory.UpdateAt = time.Now().Local().String()
+	chatHistory.UpdateAt = utils.GetJktTimeZone()
 	chatHistory.LastChat = ""
 
 	if err := db.Create(chatHistory); err.Error != nil {
