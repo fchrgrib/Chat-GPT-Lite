@@ -6,11 +6,13 @@ import { useNavigate } from "react-router-dom";
 function HistoryTab({HistoryData, historyDesc}) {
   const navigate = useNavigate()
   const navigateLink = "/" + HistoryData.id
+  const homeLink = "/"
   const API = "chat/" + HistoryData.id + "/delete_chat"
 
-  const deleteRequest = () => {
+  const deleteRequest = async() => {
     //console.log("fetch history before")
-    fetch(API, { method: 'DELETE'})
+    await fetch(API, { method: 'DELETE'})
+    navigate(navigateLink)
   }
   
   const historyClicked = () => {

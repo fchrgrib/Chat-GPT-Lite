@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 function AlgoChoice({algoData}) {
   const [algo, setAlgo] = useState('')
 
+  useEffect(() => {
+    algoData("KMP");
+  })
+
   return (
     <div className='algoChoice'>
         <hr className="solid"></hr>

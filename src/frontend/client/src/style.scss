@@ -50,7 +50,7 @@
                         flex-direction: column;
                         justify-content: space-between;
                         padding-top: 15px;
-                        overflow-y: hidden;
+                        overflow-y: scroll;
                         height: 100%;
                         
                         .text-container{
@@ -99,6 +99,10 @@
                         .text-container:hover{
                             background-color: #bebebe;
                         }
+                    }
+
+                    .history-container::-webkit-scrollbar{
+                        display: none;
                     }
                 }
     

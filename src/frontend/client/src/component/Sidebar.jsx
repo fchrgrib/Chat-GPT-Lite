@@ -38,8 +38,8 @@ function Sidebar({chatHistory, algorithm}) {
     console.log("Algoritma yang dipakai: " + data);
   }
 
-  const createSession = () => {
-    fetch(APIput, {
+  const createSession = async () => {
+    await fetch(APIput, {
       method: 'PUT',
       headers: {"Content-Type" : "application/json"}
     })
