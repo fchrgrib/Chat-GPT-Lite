@@ -11,28 +11,50 @@ function App() {
 
   const[data, setData] = useState([]);
   const[def, setDef] = useState([]);
+
   //const API = 'http://localhost:3000/ChatHistory'
   const API = 'chat'
-  const fetchHistory = () => {
+  const fetchHistory = async () => {
     //console.log("fetch history before")
-    fetch(API).then((res) => {
-      //console.log("Ini data fetch sebelum jadi json: " + res);
-      return res.json();
-    }).then((resAfter) => {
-      // console.log("Ini data fetch setelah jadi json: " + res);
-      setData(resAfter.history);
-      setDef(resAfter)
-      // console.log("Here")
-      // console.log(data)
-    })
+    // fetch(API).then((res) => {
+    //   //console.log("Ini data fetch sebelum jadi json: " + res);
+    //   return res.json();
+    // }).then((resAfter) => {
+    //   // console.log("Ini data fetch setelah jadi json: " + res);
+    //   setData(resAfter.history);
+    //   setDef(resAfter)
+    //   // console.log("Here")
+    //   // console.log(data)
+    // })
+
+    const res = await fetch(API);
+    const resAfter = await res.json();
+    setData(resAfter.history);
+    setDef(resAfter);
   }
+
+  // useEffect(() => {
+  //   //console.log("use effect in progress")
+  //   setInterval(()=>{
+  //     fetchHistory()
+  //   }, 2000)
+  // }, []);
 
   useEffect(() => {
     //console.log("use effect in progress")
-    setInterval(()=>{
-      fetchHistory()
-    }, 2000)
+    console.log("useffect masuk");
+    try {
+      fetchHistory();
+    } catch (e) {
+
+    }
   }, []);
+
+  // const fetchHistory = async () => {
+  //   const historyData = await fetch(API);
+  //   const historyDataJson = historyData.json();
+  //   setDef(historyDataJson);
+  // }
 
   return (
     <div className="App">

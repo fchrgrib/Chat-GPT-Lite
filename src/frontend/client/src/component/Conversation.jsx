@@ -26,11 +26,9 @@ function Conversation({chatID}) {
   }
 
   useEffect(() => {
-    
-    setInterval(()=>{
+    console.log("fetch chat");
       fetchChats()
-    }, 2000)
-  }, []);
+  }, [data]);
 
 
 

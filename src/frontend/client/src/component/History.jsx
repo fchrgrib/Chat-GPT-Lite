@@ -27,10 +27,8 @@ function History({chatHistory}) {
   }
 
   useEffect(() => {
-    
-    setInterval(()=>{
+      console.log("fetch history")
       fetchHistory()
-  }, 2000)
   }, []);
 
 
