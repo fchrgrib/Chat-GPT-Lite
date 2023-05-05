@@ -1,9 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Link } from 'react'
 import Sidebar from './component/Sidebar';
 import './style.scss';
 import Chat from './component/Chat';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppPanel from './component/AppPanel';
+import {useDispatch} from 'react-redux'
+
+export const useData = (url) => {
+  const [state, setState] = useState();
+
+  useEffect(() => {
+    const dataFetch = async () => {
+      const data = await (await fetch(url)).json();
+
+      setState(data);
+    };
+
+    dataFetch();
+  }, [url]);
+
+  return { data: state };
+};
 
 function App() {
   const current = new Date();
@@ -11,9 +28,10 @@ function App() {
 
   const[data, setData] = useState([]);
   const[def, setDef] = useState([]);
+  const[req, setReq] = useState('');
   //const API = 'http://localhost:3000/ChatHistory'
   const API = 'chat'
-  const fetchHistory = () => {
+  const fetchHistory = async () => {
     //console.log("fetch history before")
     fetch(API).then((res) => {
       //console.log("Ini data fetch sebelum jadi json: " + res);
@@ -26,36 +44,53 @@ function App() {
       // console.log(data)
     })
   }
+  
+  // const {template} = useData(API);
+  // const {data} = template.history;
+
+  //const dispatch = useDispatch();
+
+  // const fetchLoad = (req) => {
+  //   setReq(req);
+  //   dispatch(debouncedSearch(req));
+  // }
 
   useEffect(() => {
-    //console.log("use effect in progress")
-    setInterval(()=>{
-      fetchHistory()
-    }, 2000)
+    const dataFetch = async () => {
+      const fetched = await (await fetch(API)).json();
+
+      setData(fetched.history);
+      setDef(fetched);
+    }
+    dataFetch();
   }, []);
 
-  return (
-    <div className="App">
-      {/* <div className='container'> */}
-        {/* <Sidebar/> */}
-        <Router>
-          <Routes>
-            {
-              data && data.map((item) => {
-                // return <Route path={"/" + item.id} element={<Chat chatID={item.id}/>}/>
-                console.log("ID: " + item.id)
-                const path = "/" + item.id
-                console.log("Path created: " + path)
-                return <Route path={"/" + item.id} element={<AppPanel chatHistory={item}/>}/>
-                
-              })
-            }
-            <Route path='/' element={<AppPanel chatHistory={def}/>}/>
-          </Routes>
-        </Router>
-      {/* </div> */}
-    </div>
-  );
+  if(data){
+    return (
+      <div className="App">
+        {/* <div className='container'> */}
+          {/* <Sidebar/> */}
+          <Router>
+            <Routes>
+              
+              {
+                data && data.map((item) => {
+                  // return <Route path={"/" + item.id} element={<Chat chatID={item.id}/>}/>
+                  return <Route key={item.id} path={`/${item.id}`} element={<AppPanel chatHistory={item}/>}/>
+                  
+                })
+              }
+              <Route path='/' element={<AppPanel chatHistory={def}/>}/>
+            </Routes>
+          </Router>
+        {/* </div> */}
+      </div>
+    );
+  }
+  // console.log("Failed to get Data")
+  // fetchHistory()
+  // return <p>Loading...</p>
+  
 }
 
 export default App;

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 function Conversation({chatID}) {
   // const [file, getFile] = useState
-  const[data, setData] = useState([]);
+  const[data, setData] = useState('');
   const API = 'chat/' + chatID
   const fetchChats = () => {
     // fetch(API).then((res) => res.json()).then((resChats) => {
@@ -26,11 +26,21 @@ function Conversation({chatID}) {
   }
 
   useEffect(() => {
-    
-    setInterval(()=>{
-      fetchChats()
-    }, 2000)
-  }, []);
+    const dataFetch = async () => {
+      const fetched = await (await fetch(API)).json();
+
+      setData(fetched.chats);
+      //console.log("CONVERSATION ID: " + chatID)
+      console.log(fetched);
+    }
+    dataFetch();
+    // fetchChats()
+  }, [API]);
+
+  // while(!data){
+  //   console.log("Fetching failed conversation data")
+  //   fetchChats()
+  // }
 
 
 

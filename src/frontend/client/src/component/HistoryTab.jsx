@@ -21,7 +21,7 @@ function HistoryTab({HistoryData, historyDesc}) {
   // Current session
   if(HistoryData.id === historyDesc.id){
     return (
-      <div className='text-container current'>
+      <div className='text-container current' key={HistoryData.id}>
         <div className='history-tab'>
             {HistoryData.lastChat}
         </div>
@@ -32,7 +32,7 @@ function HistoryTab({HistoryData, historyDesc}) {
 
   // Not current session
   return (
-    <div className='text-container'>
+    <div className='text-container' key={HistoryData.id}>
       <div className='history-tab' onClick={historyClicked}>
           {HistoryData.lastChat}
       </div>

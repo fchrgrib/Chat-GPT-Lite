@@ -16,14 +16,20 @@ function Sidebar({chatHistory, algorithm}) {
     }).then((resAfter) => {
       // console.log("Ini data fetch setelah jadi json: " + res);
       setData(resAfter.history);
+      console.log(data.id)
     })
   }
 
   useEffect(() => {
     //console.log("use effect in progress")
-    setInterval(()=>{
-      fetchHistory()
-    }, 2000)
+    const dataFetch = async () => {
+      const fetched = await (await fetch(API)).json();
+
+      setData(fetched.history);
+      console.log(data.id);
+    }
+    //dataFetch();
+    fetchHistory()
   }, []);
 
   const algoData = (data) => {

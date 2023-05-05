@@ -9,6 +9,7 @@ function AppPanel({chatHistory}) {
     const algorithm = (data) => {
         setAlgo(data);
     }
+    console.log(chatHistory.id)
   return (
     <div className='appPanel'>
         <Sidebar chatHistory={chatHistory} algorithm={algorithm}/>

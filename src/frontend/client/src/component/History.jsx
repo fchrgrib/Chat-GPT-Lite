@@ -27,11 +27,19 @@ function History({chatHistory}) {
   }
 
   useEffect(() => {
-    
-    setInterval(()=>{
-      fetchHistory()
-  }, 2000)
+    const dataFetch = async () => {
+      const fetched = await (await fetch(API)).json();
+
+      setData(fetched.history);
+    }
+    dataFetch();
+    //fetchHistory()
   }, []);
+
+  // while(!data){
+  //   console.log("Fetching failed history data")
+  //   fetchHistory()
+  // }
 
 
   return (
